@@ -61,7 +61,7 @@ resources:
     secret_access_key: ((s3.secret-access-key))
     bucket: ((s3.bucket))
     #versioned_file: stemcell/bosh-stemcell-2019.12-vsphere-esxi-windows2019-go_agent.tgz
-    regexp: stemcell/bosh-stemcell-(.*)-vsphere-esxi-(.*)-go_agent.tgz
+    regexp: test-bucket/bosh-stemcell-(.*)-vsphere-esxi-(.*)-go_agent.tgz
     endpoint: ((s3.endpoint))
 
 - name: one-time-trigger
@@ -121,6 +121,7 @@ jobs:
       - task: create-base
         file: pipeline-resources/tasks/create-base.yml
         image: windows-stemcell-concourse-image
+        tags: [vsphere-linux-worker]
         input_mapping:
           autounattend: autounattend
           pipeline-resources: pipeline-resources
@@ -143,6 +144,7 @@ jobs:
           globs:
             - stembuild-linux-*
       - task: update-base
+        tags: [vsphere-linux-worker]
         file: pipeline-resources/tasks/update-base.yml
         image: windows-stemcell-concourse-image
         input_mapping:
@@ -165,6 +167,7 @@ jobs:
           globs:
             - stembuild-linux-*
       - task: clone-base
+        tags: [vsphere-linux-worker]
         file: pipeline-resources/tasks/clone-base.yml
         image: windows-stemcell-concourse-image
         input_mapping:
@@ -188,6 +191,7 @@ jobs:
           globs:
             - stembuild-linux-*
       - task: construct
+        tags: [vsphere-linux-worker]
         file: pipeline-resources/tasks/construct.yml
         image: windows-stemcell-concourse-image
         input_mapping:
@@ -199,6 +203,7 @@ jobs:
           <<: *vm-params
           <<: *os-params
       - task: package
+        tags: [vsphere-linux-worker]
         file: pipeline-resources/tasks/package.yml
         image: windows-stemcell-concourse-image
         input_mapping:
