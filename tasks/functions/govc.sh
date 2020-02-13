@@ -245,7 +245,7 @@ function getPowerState() {
 		return 1
 	fi # 2>&1
 
-	if ! powerState=$(echo ${info} | jq '.VirtualMachines[0].Runtime.PowerState'); then
+	if ! powerState=$(echo ${info} | jq -r '.VirtualMachines[0].Runtime.PowerState'); then
 		writeErr "Could not parse vm info at ${vm_ipath}"
 		return 1
 	elif [[ -z "${powerState}" ]]; then

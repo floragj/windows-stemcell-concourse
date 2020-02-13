@@ -141,7 +141,7 @@ for ((i = 1; i <= 3; i++)); do
 		exit 1
 	fi
 
-	while [[ $(getPowerState ${baseVMIPath}) != "poweredOn"* ]]
+	while [[ $(getPowerState ${baseVMIPath}) != "poweredOn" ]]
 	do
 		printf "\\"
 		echo "waiting for power on"
