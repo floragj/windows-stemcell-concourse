@@ -112,12 +112,14 @@ for ((i = 1; i <= 3; i++)); do
 		exit 1
 	fi
 
+	echo "installed updates $i times"
+
 	if ! ret=$(shutdownVM "${baseVMIPath}"); then
 		writeErr "could not shutdown VM, ${ret}"
 		exit 1
 	fi
 
-	printf "/"
+	echo "/"
 
 	while read status; do
 		if [[ $status == "toolsNotRunning" ]]; then
@@ -128,7 +130,11 @@ for ((i = 1; i <= 3; i++)); do
 	 	sleep 2
 	done <<< $(getToolsStatus "${baseVMIPath}")
 
+    echo "starting long sleep"
+
 	sleep 20 #There is a brief time between when the tools process is terminated and the VM is actually powered off
+
+    echo "waking up well-rested"
 
 	if ! ret=$(powerOnVM "${baseVMIPath}"); then
 		writeErr "${ret}"
@@ -138,8 +144,11 @@ for ((i = 1; i <= 3; i++)); do
 	while [[ $(getPowerState ${baseVMIPath}) != "poweredOn"* ]]
 	do
 		printf "\\"
+		echo "waiting for power on"
 		sleep 10
 	done
+
+    echo "waking up"
 
 	#Wait for windows to completely boot up
 	while [[ $(getToolsStatus "${baseVMIPath}") != "toolsOk" ]]
@@ -149,6 +158,8 @@ for ((i = 1; i <= 3; i++)); do
 	done
 
 	printf "|"
+
+	echo "update cycle finished"
 done
 echo ""
 echo "Done"
